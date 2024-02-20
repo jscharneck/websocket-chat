@@ -26,7 +26,10 @@ socket.on("message", (msg) => {
 
 function upload(files) {
   // debugger;
-  socket.emit("upload", files[0], (status) => {
-    console.log(status);
+  console.log("files: ", files);
+  console.log("files[0]: ", files[0]);
+
+  socket.emit("upload", files, (status) => {
+    console.log("status: ", status);
   });
 }

@@ -7,7 +7,7 @@ import { writeFile } from "fs";
 
 const app = express();
 const server = createServer(app);
-const io = new Server(server);
+const io = new Server(server); // add cors
 
 app.use(express.static("public"));
 
@@ -23,31 +23,23 @@ io.on("connection", (socket) => {
     console.log("user disconnected");
   });
 
-  //   socket.on("message", (msg) => {
-  //     console.log("from client: ", msg);
-
-  //     // socket.broadcast.emit("hi");
-  //     io.emit("chat message", msg);
-  //   });
-
   socket.on("message", (msg) => {
     console.log("from client: ", msg);
     io.emit("message", msg);
-
-    //io.emit("hello", "world");
-
-    //socket.broadcast.emit("hello", "mew mew nigga!");
   });
   // this will emit the event to all connected sockets
 
   socket.on("upload", (file, callback) => {
-    debugger;
-    console.log(file); // <Buffer 25 50 44 ...>
+    console.log("file: ", file); // <Buffer 25 50 44 ...>
+    console.log("file[1]: ", file[0]); // <Buffer 25 50 44 ...>
 
-    // save the content to the disk, for example
-    writeFile("../uploads/dalio.jpg", file, (err) => {
-      callback({ message: err ? `failure ${err}` : "success" });
-    });
+    writeFile(
+      "./uploads/file_" + Math.random() * 99000 + ".jpg",
+      file[0],
+      (err) => {
+        callback({ message: err ? `failure ${err}` : "success" });
+      }
+    );
   });
 });
 
