@@ -10,7 +10,7 @@ form.addEventListener("submit", function (e) {
 
   if (input.value) {
     socket.emit("message", input.value);
-    input.value = "";
+    //input.value = "";
   }
 
   upload(files.files);
@@ -25,7 +25,7 @@ socket.on("message", (msg) => {
 });
 
 function upload(files) {
-  debugger;
+  // debugger;
   socket.emit("upload", files[0], (status) => {
     console.log(status);
   });
