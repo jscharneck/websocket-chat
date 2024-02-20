@@ -7,7 +7,12 @@ import { writeFile } from "fs";
 
 const app = express();
 const server = createServer(app);
-const io = new Server(server); // add cors
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+  },
+  maxHttpBufferSize: 1e99990,
+}); // add cors
 
 app.use(express.static("public"));
 
@@ -31,7 +36,6 @@ io.on("connection", (socket) => {
 
   socket.on("upload", (file, callback) => {
     console.log("file: ", file); // <Buffer 25 50 44 ...>
-    console.log("file[1]: ", file[0]); // <Buffer 25 50 44 ...>
 
     writeFile(
       "./uploads/file_" + Math.random() * 99000 + ".jpg",
