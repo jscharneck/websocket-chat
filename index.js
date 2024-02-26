@@ -11,12 +11,13 @@ const io = new Server(server, {
   cors: {
     origin: "*",
   },
-  maxHttpBufferSize: 1e99990,
+  maxHttpBufferSize: 4294967296, //1GB
 }); // add cors
 
 app.use(express.static("public"));
 
-app.get("/", (req, res) => {
+app.get("/ip", (req, res) => {
+  console.log(req.socket.remoteAddress);
   res.send("hello");
 });
 
@@ -34,14 +35,15 @@ io.on("connection", (socket) => {
   });
   // this will emit the event to all connected sockets
 
-  socket.on("upload", (file, callback) => {
-    console.log("file: ", file); // <Buffer 25 50 44 ...>
+  socket.on("upload", (file, callback, item) => {
+    console.log("file: ", file[0]); // <Buffer 25 50 44 ...>
 
     writeFile(
-      "./uploads/file_" + Math.random() * 99000 + ".jpg",
+      "./uploads/file_" + Math.random() * 99000 + ".mp4",
       file[0],
       (err) => {
         callback({ message: err ? `failure ${err}` : "success" });
+        io.emit("message", "file upload success");
       }
     );
   });
