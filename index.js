@@ -36,6 +36,7 @@ io.on("connection", (socket) => {
   // this will emit the event to all connected sockets
 
   socket.on("upload", (file, callback, item) => {
+    debugger
     console.log("file: ", file[0]); // <Buffer 25 50 44 ...>
 
     writeFile(
